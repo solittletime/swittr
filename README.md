@@ -10,14 +10,17 @@ Dependencies:
 
 Then check out the project and:
 
-```cd client
+```sh
+cd client
 ng build --prod
 ```
 
 ### Running
 
-```cd server
-node index.js
+```sh
+cd server
+gulp build
+npm start
 ```
 
 ### Using the app
