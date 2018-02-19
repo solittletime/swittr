@@ -28,3 +28,7 @@ package-lock.json
 
 # Users Environment Variables
 .lock-wscript
+
+# OS metadata
+.DS_Store
+Thumbs.db

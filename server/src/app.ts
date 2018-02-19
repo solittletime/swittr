@@ -1,10 +1,10 @@
-import { createServer, Server } from 'http';
-import * as express from 'express';
-import * as path from 'path';
+import { createServer, Server } from "http";
+import * as express from "express";
+import * as path from "path";
 
-export class Swittr {
+export class AppServer {
   public static readonly PORT: number = 4300;
-  public static readonly BASE: string = '/../../client/dist';
+  public static readonly BASE: string = "/../../client/dist";
   private app: express.Application;
   private server: Server;
   private port: string | number;
@@ -26,21 +26,21 @@ export class Swittr {
   }
 
   private config(): void {
-    this.port = process.env.PORT || Swittr.PORT;
+    this.port = process.env.PORT || AppServer.PORT;
   }
 
   private listen(): void {
     this.server.listen(this.port, () => {
-      console.log('Running server on port %s', this.port);
+      console.log("Running server on port %s", this.port);
     });
   }
 
   private routes(): void {
-    let router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.sendFile(path.join(__dirname + Swittr.BASE + '/index.html'));
+    const router = express.Router();
+    router.get("/", (req, res, next) => {
+      res.sendFile(path.join(__dirname + AppServer.BASE + "/index.html"));
     });
-    this.app.use('/', express.static(path.join(__dirname, Swittr.BASE)))
+    this.app.use("/", express.static(path.join(__dirname, AppServer.BASE)));
 
   }
 
