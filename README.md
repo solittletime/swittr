@@ -1,6 +1,6 @@
 # Swittr
 
-Demo app using Node.js, Express.js plus Angular with a service worker.
+Demo app using Node.js, Express.js, Socket.io, RxJS plus Angular with a service worker.
 
 ### Build
 
@@ -8,18 +8,24 @@ Dependencies:
 
 * [Node.js](https://nodejs.org/en/) v8.9.4
 
-Then check out the project and:
+Then clone the project and:
 
 ```
-cd client
+cd swittr/client
+npm install
+npm run build
+```
+
+```
+cd swittr/server
+npm install
 npm run build
 ```
 
 ### Running
 
 ```
-cd server
-npm run build
+cd swittr/server
 npm start
 ```
 
@@ -27,7 +33,7 @@ npm start
 
 (http://localhost:4300)
 
-### Resources
+### Further reading
 
-https://github.com/Microsoft/TypeScript-Node-Starter.git
-http://www.discoversdk.com/blog/socket-programming-in-angularjs-2-building-a-simple-chat-application-with-socket.io-and-rxjs
+* [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter.git)
+* [Socket Programming in AngularJS 2 - Building a simple chat application with Socket.io and RxJS](http://www.discoversdk.com/blog/socket-programming-in-angularjs-2-building-a-simple-chat-application-with-socket.io-and-rxjs)

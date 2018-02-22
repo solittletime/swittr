@@ -1,1 +1,284 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face
+{
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto"),local("Roboto-Regular"),url("https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff") format("woff");
+}
+@font-face
+{
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local("Roboto Bold"),local("Roboto-Bold"),url("https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff") format("woff");
+}
+html
+{
+	background: #fafafa;
+}
+html,body
+{
+	font-family: roboto, sans-serif;
+	margin: 0;
+	padding: 0;
+	webkit-tap-highlight-color: transparent;
+}
+pre,code,kbd,samp,tt
+{
+	font-family: monospace;
+	font-size: 1em;
+}
+button:-moz-focus-inner
+{
+	border: 0;
+	padding: 0;
+}
+button
+{
+	cursor: pointer;
+}
+.unbutton
+{
+	background: none;
+	border: none;
+	display: inline-block;
+	font: inherit;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+.layout
+{
+	display: flex;
+	display: -webkit-flex;
+	flex-flow: column;
+	height: 100%;
+	webkit-flex-flow: column;
+}
+.main
+{
+	display: flex;
+	display: -webkit-flex;
+	flex: 1;
+	overflow: hidden;
+	position: relative;
+	webkit-flex: 1;
+}
+html,body
+{
+	height: 100%;
+	overflow: hidden;
+}
+.scroller
+{
+	overflow: hidden;
+	overflow-y: scroll;
+	width: 100%;
+}
+.card
+{
+	background: #fff;
+	border-radius: 2px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	margin: 8px;
+	overflow: hidden;
+}
+@media (min-width: 600px)
+{
+	.card
+	{
+		box-shadow: 0 3px 7px rgba(0,0,0,0.15);
+		margin: 16px;
+	}
+}
+@media (min-width: 800px)
+{
+	.card
+	{
+		margin: 16px auto;
+		width: 756px;
+	}
+}
+.toolbar
+{
+	align-items: center;
+	background: #3F51B5;
+	box-shadow: 0 0px 11px rgba(0,0,0,0.4);
+	color: #FFFFFF;
+	display: flex;
+	display: -webkit-flex;
+	height: 56px;
+	position: relative;
+	webkit-align-items: center;
+	z-index: 1;
+}
+@media (min-width: 600px)
+{
+	.toolbar
+	{
+		height: 72px;
+	}
+}
+.toolbar .site-title
+{
+	font-size: 1.2rem;
+	font-weight: normal;
+	margin: 0;
+	margin-left: 16px;
+	padding: 0;
+}
+@media (min-width: 600px)
+{
+	.toolbar .site-title
+	{
+		font-size: 1.3rem;
+		margin-left: 24px;
+	}
+}
+.post-main-img
+{
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+@supports (object-fit: cover)
+{
+	.post-main-img
+	{
+		height: 100%;
+		object-fit: cover;
+	}
+}
+.post-main-img-container
+{
+	background: #e4e4e4;
+	overflow: hidden;
+	position: relative;
+	transform: translateZ(0);
+}
+.post-main-img-container::before
+{
+	content: '';
+	display: block;
+	padding-top: 56.25%;
+}
+.post-content
+{
+	display: flex;
+	display: -webkit-flex;
+	padding: 16px;
+}
+.post-text-content
+{
+	flex: 1;
+	line-height: 1.4;
+	webkit-flex: 1;
+}
+.post-text-content p
+{
+	color: #666;
+	margin: 0;
+	max-width: 550px;
+}
+.post-avatar
+{
+	border-radius: 20px;
+	margin-right: 16px;
+	object-fit: cover;
+}
+.post-title
+{
+	display: flex;
+	display: -webkit-flex;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin-bottom: 6px;
+}
+.post-heading
+{
+	flex: 1;
+	font-size: inherit;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	webkit-flex: 1;
+}
+.post-time
+{
+	color: #888;
+}
+.posts-alert
+{
+	background: radial-gradient(ellipse farthest-side at 50% 0, rgba(26,56,218,0.47), rgba(26,56,218,0));
+	height: 44px;
+	left: 0;
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transition: opacity 0.5s ease-in-out;
+	will-change: opacity;
+	z-index: 3;
+}
+.posts-alert.active
+{
+	opacity: 1;
+}
+.toasts
+{
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	z-index: 3;
+}
+@media (min-width: 640px)
+{
+	.toasts
+	{
+		bottom: 30px;
+		left: 30px;
+		right: auto;
+	}
+}
+.toast
+{
+	background: #323232;
+	color: #fff;
+	display: flex;
+	display: -webkit-flex;
+	opacity: 0;
+	padding: 14px 24px;
+	padding-right: 0;
+}
+@media (min-width: 640px)
+{
+	.toast
+	{
+		border-radius: 2px;
+		max-width: 568px;
+		min-width: 288px;
+	}
+}
+.toast .toast-content
+{
+	flex: 1;
+	margin-right: 48px;
+	webkit-flex: 1;
+}
+.toast button
+{
+	color: #FF5252;
+	margin: 0;
+	margin-right: 24px;
+	min-width: min-content;
+	min-width: -moz-min-content;
+	min-width: -webkit-min-content;
+	text-transform: uppercase;
+}
+.toast button:focus
+{
+	color: #fff;
+	outline: none;
+}

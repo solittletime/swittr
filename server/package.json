@@ -1,7 +1,7 @@
 {
   "name": "swittr",
   "version": "0.1.0",
-  "description": "A demo",
+  "description": "Demo app using Node.js, Express.js, Socket.io, RxJS plus Angular with a service worker",
   "repository": {
     "type": "git",
     "url": "https://github.com/solittletime/swittr.git"
