@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class ChatService {
-  private url = 'http://localhost:4301';
   private socket;
 
   sendMessage(message) {
@@ -12,7 +11,7 @@ export class ChatService {
 
   getMessages() {
     const observable = new Observable(observer => {
-      this.socket = io(this.url);
+      this.socket = io();
       this.socket.on('message', (data) => {
         observer.next(data);
       });
