@@ -24,18 +24,12 @@ export class AppServer {
     this.app = express();
   }
 
-  private createServer(): void {
-    this.server = createServer(this.app);
-  }
-
   private config(): void {
     this.port = process.env.PORT || AppServer.PORT;
   }
 
-  private listen(): void {
-    this.server.listen(this.port, () => {
-      console.log("Running server on port %s", this.port);
-    });
+  private createServer(): void {
+    this.server = createServer(this.app);
   }
 
   private routes(): void {
@@ -44,16 +38,16 @@ export class AppServer {
       res.sendFile(path.join(__dirname + AppServer.BASE + "/index.html"));
     });
     this.app.use("/", express.static(path.join(__dirname, AppServer.BASE)));
+  }
 
+  private listen(): void {
+    this.server.listen(this.port, () => {
+      console.log("Running server on port %s", this.port);
+    });
   }
 
   private sockets(): void {
     this.io = socketIo(this.server);
-
-    this.server.listen(this.port, () => {
-      console.log("Running server on port %s", this.port);
-    });
-
     this.io.on("connect", (socket: any) => {
       console.log("User connected on port %s.", this.port);
       socket.on("add-message", (message: string) => {
@@ -69,7 +63,6 @@ export class AppServer {
           }
         );
       });
-
       socket.on("disconnect", () => {
         console.log("Client disconnected");
       });

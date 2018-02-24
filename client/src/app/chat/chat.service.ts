@@ -1,24 +1,22 @@
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class ChatService {
   private socket;
 
-  sendMessage(message) {
+  constructor() {
+    this.socket = io();
+  }
+
+  public sendMessage(message) {
     this.socket.emit('add-message', message);
   }
 
-  getMessages() {
-    const observable = new Observable(observer => {
-      this.socket = io();
-      this.socket.on('message', (data) => {
-        observer.next(data);
+  public getMessages = () => {
+    return Observable.create((observer) => {
+      this.socket.on('message', (message) => {
+        observer.next(message);
       });
-      return () => {
-        this.socket.disconnect();
-      };
     });
-    return observable;
   }
 }

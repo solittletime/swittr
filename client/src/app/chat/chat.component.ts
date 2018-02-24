@@ -8,11 +8,13 @@ import { ChatService } from './chat.service';
   providers: [ChatService]
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  title = 'swittr';
+  message;
   messages = [];
   connection;
-  message;
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService) {
+  }
 
   sendMessage() {
     this.chatService.sendMessage(this.message);
