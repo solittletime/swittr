@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ChatService } from './chat.service';
+import timeService from '../util/util.time';
 
 @Component({
   selector: 'app-chat',
@@ -22,9 +23,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connection = this.chatService.getMessages().subscribe(message => {
-      this.messages.push(message);
-    });
+    this.connection = this.chatService.getMessages().subscribe(
+      message => {
+        this.messages.push(message);
+        this.messages.forEach((data) => {
+          data.timeDifference = timeService(data.time);
+        });
+      });
   }
 
   ngOnDestroy() {

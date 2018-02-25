@@ -6,7 +6,7 @@
       <div class="post-text-content">
         <div class="post-title">
           <h1 class="post-heading">{{message.name}}</h1>
-          <time class="post-time" [dateTime]="message.time">30s</time>
+          <time class="post-time" [dateTime]="message.time">{{message.timeDifference}}</time>
         </div>
         <p>
           {{message.text}}
