@@ -1,29 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ChatService } from './chat.service';
+import { IOService } from '../service/io.service';
 import timeService from '../util/util.time';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css'],
-  providers: [ChatService]
+  styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
   title = 'swittr';
-  message;
   messages = [];
   connection;
 
-  constructor(private chatService: ChatService) {
-  }
-
-  sendMessage() {
-    this.chatService.sendMessage(this.message);
-    this.message = '';
+  constructor(private ioService: IOService) {
   }
 
   ngOnInit() {
-    this.connection = this.chatService.getMessages().subscribe(
+    this.connection = this.ioService.getMessages().subscribe(
       message => {
         this.messages.push(message);
         this.messages.forEach((data) => {

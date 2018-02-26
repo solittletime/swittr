@@ -8,11 +8,13 @@ import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 
 import { environment } from '../environments/environment';
+import { KeyComponent } from './key/key.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent
+    ChatComponent,
+    KeyComponent
   ],
   imports: [
     BrowserModule,

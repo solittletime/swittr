@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
-export class ChatService {
+@Injectable()
+export class IOService {
   private socket;
 
   constructor() {

@@ -1,0 +1,8 @@
+<form>
+  <span class="span-input">
+    <input [(ngModel)]="message" [ngModelOptions]="{standalone: true}" class="input" />
+  </span>
+  <span class="span-button">
+    <button (click)="sendMessage()" class="button">Send</button>
+  </span>
+</form>
