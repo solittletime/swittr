@@ -17,16 +17,25 @@ platformBrowserDynamic().bootstrapModule(AppModule).then(() => {
         return;
       }
 
-      if (reg.waiting) {
-        console.log('update ready');
-//        indexController._updateReady(reg.waiting);
-        return;
-      }
+      setTimeout(() => {
 
-//      if (reg.installing) {
+        console.log('pause 1');
+
+        if (reg.waiting) {
+          console.log('reg.waiting');
+//        indexController._updateReady(reg.waiting);
+          return;
+        }
+
+        if (reg.installing) {
+          console.log('reg.installing');
 //        indexController._trackInstalling(reg.installing);
-//        return;
-//      }
+          return;
+        }
+
+      }, 5000); // 5 second delay needed for these events
+
+      console.log('pause 2');
 
 //      reg.addEventListener('updatefound', function () {
 //        indexController._trackInstalling(reg.installing);
