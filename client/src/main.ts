@@ -9,7 +9,28 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule).then(() => {
-  if ('serviceWorker' in navigator && environment.production) {
-    navigator.serviceWorker.register('/ngsw-worker.js');
+  if ('serviceWorker' in navigator) {
+    const indexController = this;
+
+    navigator.serviceWorker.register('/sw.js').then(function (reg) {
+      if (!navigator.serviceWorker.controller) {
+        return;
+      }
+
+      if (reg.waiting) {
+        console.log('update ready');
+//        indexController._updateReady(reg.waiting);
+        return;
+      }
+
+//      if (reg.installing) {
+//        indexController._trackInstalling(reg.installing);
+//        return;
+//      }
+
+//      reg.addEventListener('updatefound', function () {
+//        indexController._trackInstalling(reg.installing);
+//      });
+    });
   }
 }).catch(err => console.log(err));
