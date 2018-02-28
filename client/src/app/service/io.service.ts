@@ -21,4 +21,20 @@ export class IOService {
       });
     });
   }
+
+  public getConnect = () => {
+    return Observable.create((observer) => {
+      this.socket.on('connect', () => {
+        console.log('connect');
+      });
+    });
+  }
+
+  public getDisconnect = () => {
+    return Observable.create((observer) => {
+      this.socket.on('disconnect', (reason) => {
+        console.log(reason);
+      });
+    });
+  }
 }
