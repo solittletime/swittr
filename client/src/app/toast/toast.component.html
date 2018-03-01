@@ -1,4 +1,4 @@
 <div class="toast" [style.opacity]="settings.opacity">
   <div class="toast-content">{{settings.label}}</div>
-  <button *ngFor="let toast of toasts" class="unbutton" (click)="sendMessage(toast.button)">{{toast.action}}</button>
+  <button *ngFor="let action of actions" class="unbutton" (click)="sendMessage(action)">{{action}}</button>
 </div>

@@ -10,6 +10,10 @@ export class IOService {
     this.socket = io();
   }
 
+  public getSocket() {
+    return this.socket;
+  }
+
   public sendMessage(message) {
     this.socket.emit('add-message', message);
   }
@@ -25,7 +29,7 @@ export class IOService {
   public getConnect = () => {
     return Observable.create((observer) => {
       this.socket.on('connect', () => {
-        console.log('connect');
+        observer.next();
       });
     });
   }
@@ -33,7 +37,7 @@ export class IOService {
   public getDisconnect = () => {
     return Observable.create((observer) => {
       this.socket.on('disconnect', (reason) => {
-        console.log(reason);
+        observer.next(reason);
       });
     });
   }

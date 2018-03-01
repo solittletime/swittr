@@ -37,3 +37,5 @@ npm start
 
 * [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter.git)
 * [Socket Programming in AngularJS 2 - Building a simple chat application with Socket.io and RxJS](http://www.discoversdk.com/blog/socket-programming-in-angularjs-2-building-a-simple-chat-application-with-socket.io-and-rxjs)
+* [Wittr - Silly demo app for an online course](https://github.com/jakearchibald/wittr)
+* [RxJS - The ReactiveX library for JavaScript](http://reactivex.io/rxjs/manual/overview.html)

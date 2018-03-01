@@ -23,10 +23,6 @@ export class ChatComponent implements OnInit, OnDestroy {
           data.timeDifference = timeService(data.time);
         });
       });
-
-    this.ioService.getConnect().subscribe();
-
-    this.ioService.getDisconnect().subscribe();
   }
 
   ngOnDestroy() {
