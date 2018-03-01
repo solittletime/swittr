@@ -8,12 +8,14 @@ import { ChatComponent } from './chat/chat.component';
 
 import { environment } from '../environments/environment';
 import { KeyComponent } from './key/key.component';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    KeyComponent
+    KeyComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
