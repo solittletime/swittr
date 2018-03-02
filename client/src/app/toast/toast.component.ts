@@ -10,41 +10,47 @@ import { IOService } from '../service/io.service';
   styleUrls: ['./toast.component.css']
 })
 export class ToastComponent implements OnInit {
-  actions = [];
-  settings = { opacity: 0, label: '' };
-  private moduleSource = new Subject<any>();
-  moduleValue = this.moduleSource.asObservable();
+  names = [
+    { label: 'Unable to connect. Retrying…', actions: ['dismiss'] },
+    { label: 'New version available', actions: ['refresh', 'dismiss'] }
+  ];
+  opacity = 0;
+  index = 0;
+
+  clickSource = new Subject<any>();
+  clickValue = this.clickSource.asObservable();
 
   constructor(private ioService: IOService) {
-    //localStorage.setItem('sw12', '333');
-    //const cat = localStorage.getItem('sw12');
-    //localStorage.removeItem('sw12');
     this.updateServiceWorker();
   }
 
   ngOnInit() {
     this.ioService.getDisconnect().subscribe(data => {
-      this.settings.opacity = 1;
-      this.settings.label = 'Unable to connect. Retrying…';
-      this.actions = ['dismiss'];
-      console.log('4441 ' + data);
+      this.opacity = 1;
+      this.index = 0;
     });
     this.ioService.getConnect().subscribe(() => {
-      console.log('4442 connect');
+      if (this.index === 0) {
+        this.opacity = 0;
+      }
     });
   }
 
-  sendMessage(answer) {
-    this.moduleSource.next(answer);
-    this.settings.opacity = 0;
+  buttonClicked(action) {
+    this.clickSource.next(action);
+    this.opacity = 0;
   }
 
-  public updateServiceWorker() {
-    if (!('serviceWorker' in navigator)) return;
+  updateServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
     const _toast = this;
 
     navigator.serviceWorker.register('/sw.js').then(function (reg) {
-      if (!navigator.serviceWorker.controller) return;
+      if (!navigator.serviceWorker.controller) {
+        return;
+      }
 
       setTimeout(() => {
         if (reg.waiting) {
@@ -64,26 +70,24 @@ export class ToastComponent implements OnInit {
     });
   }
 
-  public trackInstalling(worker) {
+  trackInstalling(worker) {
     const _toast = this;
     worker.addEventListener('statechange', function () {
-      if (worker.state == 'installed') {
+      if (worker.state === 'installed') {
         _toast.updateReady(worker);
       }
     });
-  };
+  }
 
   updateReady(worker) {
-    this.settings.opacity = 1;
-    this.settings.label = 'New version available';
-    this.actions = ['refresh', 'dismiss'];
+    this.opacity = 1;
+    this.index = 1;
 
-    const _val = this.moduleValue.subscribe(answer => {
-      console.log('aaa ' + answer);
-      if (answer == 'refresh') {
+    const _ = this.clickValue.subscribe(answer => {
+      if (answer === 'refresh') {
         worker.postMessage({ action: 'skipWaiting' });
       }
-      _val.unsubscribe();
-    })
-  };
+      _.unsubscribe();
+    });
+  }
 }

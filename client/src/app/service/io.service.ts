@@ -10,10 +10,6 @@ export class IOService {
     this.socket = io();
   }
 
-  public getSocket() {
-    return this.socket;
-  }
-
   public sendMessage(message) {
     this.socket.emit('add-message', message);
   }

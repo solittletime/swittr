@@ -16,7 +16,7 @@ self.addEventListener('install', function (event) {
         '/styles.bundle.js',
         '/vendor.bundle.js',
         '/favicon.ico',
-        'assets/homer-1x.jpg'
+        'assets/homer-1x.png'
       ]);
     })
   );
