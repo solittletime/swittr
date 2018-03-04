@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IOService } from '../service/io.service';
-import timeService from '../util/util.time';
+import timeDifference from '../util/time.util';
+import { ScrollDirective } from '../scroll.directive';
 
 @Component({
   selector: 'app-chat',
@@ -12,7 +13,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   messages = [];
   connection;
 
-  constructor(private ioService: IOService) {
+  constructor(private ioService: IOService, private scroll: ScrollDirective) {
   }
 
   ngOnInit() {
@@ -20,8 +21,14 @@ export class ChatComponent implements OnInit, OnDestroy {
       message => {
         this.messages.push(message);
         this.messages.forEach((data) => {
-          data.timeDifference = timeService(data.time);
+          data.timeDifference = timeDifference(data.time);
         });
+
+        setTimeout(() => {
+          const el = this.scroll.getElement().nativeElement;
+          el.scrollTop = el.scrollHeight - el.clientHeight;
+        }, 100);
+
       });
   }
 

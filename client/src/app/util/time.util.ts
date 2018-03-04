@@ -1,4 +1,4 @@
-export default function timeService(date) {
+export default function timeDifference(date) {
   const dateDiff = Date.now() - Date.parse(date);
   if (dateDiff <= 0 || Math.floor(dateDiff / 1000) === 0) {
     return 'now';

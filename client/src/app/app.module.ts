@@ -9,13 +9,15 @@ import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
 import { KeyComponent } from './key/key.component';
 import { ToastComponent } from './toast/toast.component';
+import { ScrollDirective } from './scroll.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     KeyComponent,
-    ToastComponent
+    ToastComponent,
+    ScrollDirective
   ],
   imports: [
     BrowserModule,
