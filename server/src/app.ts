@@ -5,7 +5,8 @@ import * as socketIo from "socket.io";
 
 export class AppServer {
   public static readonly PORT: number = 4300;
-  public static readonly BASE: string = "/../../client/dist";
+  public static readonly BASE: string = "/../../client-angular/dist";
+  // public static readonly BASE: string = "/../../client-react/build";
   private app: express.Application;
   private io: SocketIO.Server;
   private port: string | number;
