@@ -1,0 +1,28 @@
+
+.span-input {
+  display:table-cell;
+  width:100%;
+}
+
+.span-button {
+  display:table-cell;
+}
+
+.input {
+  border-top:    1px solid #82E0FF;
+  border-right:  1px solid #82E0FF;
+  border-bottom: 1px solid #82E0FF;
+  border-left:   1px solid #82E0FF;
+  color: #82E0FF;
+  width:100%;
+  background: #3F51B5;
+}
+
+.button {
+  border-radius: 8px;
+  border-color: #82E0FF;
+  color: #82E0FF;
+  border-width: 1px;
+  margin-left: 16px;
+  background: #3F51B5
+}

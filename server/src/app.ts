@@ -5,8 +5,8 @@ import * as socketIo from "socket.io";
 
 export class AppServer {
   public static readonly PORT: number = 4300;
-  public static readonly BASE: string = "/../../client-angular/dist";
-  // public static readonly BASE: string = "/../../client-react/build";
+  // public static readonly BASE: string = "/../../client-angular/dist";
+  public static readonly BASE: string = "/../../client-react/build";
   private app: express.Application;
   private io: SocketIO.Server;
   private port: string | number;
@@ -65,17 +65,17 @@ export class AppServer {
       socket.on("disconnect", () => {
         console.log("Client disconnected");
       });
-    });
 
-    try {
-      setTimeout(_ => {
-        a.forEach((bot) => {
-          this.io.emit("message", _appServer.generateMessage(bot.name, bot.message));
-        });
-      }, 5000);
-    } catch (err) {
-      console.log(err);
-    }
+      try {
+        setTimeout(_ => {
+          a.forEach((bot) => {
+            this.io.emit("message", _appServer.generateMessage(bot.name, bot.message));
+          });
+        }, 5000);
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }
 
   generateMessage(user: string, text: string) {
