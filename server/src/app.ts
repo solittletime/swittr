@@ -4,17 +4,16 @@ import * as path from "path";
 import * as socketIo from "socket.io";
 
 export class AppServer {
-  public static readonly PORT: number = 4300;
-  // public static readonly BASE: string = "/../../client-angular/dist";
-  public static readonly BASE: string = "/../../client-react/build";
   private app: express.Application;
   private io: SocketIO.Server;
+  private base: string;
   private port: string | number;
   private server: Server;
 
-  constructor() {
+  constructor(base = "/../../client-angular/dist", port = 4300) {
+    this.base = base;
+    this.port = process.env.PORT || port;
     this.createApp();
-    this.config();
     this.createServer();
     this.routes();
     this.listen();
@@ -25,10 +24,6 @@ export class AppServer {
     this.app = express();
   }
 
-  private config(): void {
-    this.port = process.env.PORT || AppServer.PORT;
-  }
-
   private createServer(): void {
     this.server = createServer(this.app);
   }
@@ -36,9 +31,9 @@ export class AppServer {
   private routes(): void {
     const router = express.Router();
     router.get("/", (req, res, next) => {
-      res.sendFile(path.join(__dirname + AppServer.BASE + "/index.html"));
+      res.sendFile(path.join(__dirname + this.base + "/index.html"));
     });
-    this.app.use("/", express.static(path.join(__dirname, AppServer.BASE)));
+    this.app.use("/", express.static(path.join(__dirname, this.base)));
   }
 
   private listen(): void {
