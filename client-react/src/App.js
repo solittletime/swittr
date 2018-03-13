@@ -30,23 +30,23 @@ class Chat extends React.Component {
   render() {
     var _ = this;
     return (
-      <div className="scroller posts">
+      <div className="scroller posts" id="scrollx">
         {this.props.messages.map(message => {
-            return (
-              <article className="card post">
-                <div className="post-content">
-                  <img className="post-avatar" alt="" width="40" height="40" src={_.props.images[message.name]} />
-                  <div className="post-text-content">
-                    <div className="post-title">
-                      <h1 className="post-heading">{message.name}</h1>
-                      <time className="post-time" datetime={message.time}>{message.timeDifference}</time>
-                    </div>
-                    <p>{message.text}</p>
+          return (
+            <article className="card post">
+              <div className="post-content">
+                <img className="post-avatar" alt="" width="40" height="40" src={_.props.images[message.name]} />
+                <div className="post-text-content">
+                  <div className="post-title">
+                    <h1 className="post-heading">{message.name}</h1>
+                    <time className="post-time" datetime={message.time}>{message.timeDifference}</time>
                   </div>
+                  <p>{message.text}</p>
                 </div>
-              </article>
-            )
-          }
+              </div>
+            </article>
+          )
+        }
         )}
       </div>
     );
@@ -81,7 +81,7 @@ class App extends React.Component {
       messages: [],
       images: []
     };
-    
+
     this.state.images['Homer'] = require('./homer-1x.png');
     this.state.images['Lisa'] = require('./lisa-1x.png');
 
@@ -94,12 +94,17 @@ class App extends React.Component {
     this.socket = io();
 
     this.socket.on('message', (data) => {
-      console.log(data);
       this.state.messages.push(data);
       var index, len;
       for (index = 0, len = this.state.messages.length; index < len; ++index) {
         this.state.messages[index].timeDifference = timeDifference(this.state.messages[index].time);
       }
+
+      setTimeout(() => {
+        const el = document.getElementById('scrollx');
+        el.scrollTop = el.scrollHeight - el.clientHeight;
+      }, 100);
+
       this.setState({ messages: this.state.messages });
     });
 
