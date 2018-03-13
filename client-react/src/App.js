@@ -3,8 +3,6 @@ import './App.css';
 import './Key.css';
 import './index.css';
 import io from "socket.io-client";
-import homer from './homer-1x.png';
-import lisa from './lisa-1x.png';
 import timeDifference from './util/time.util';
 
 class Toast extends React.Component {
@@ -12,45 +10,32 @@ class Toast extends React.Component {
     { label: 'Unable to connect. Retrying…', actions: ['dismiss'] },
     { label: 'New version available', actions: ['refresh', 'dismiss'] }
   ];
-  index = 0;
 
   render() {
+    var _ = this;
     return (
       <div className="toasts">
-        <div className="toast" style={{ opacity: 1 }}>
-          <div className="toast-content">Blah Blah Blah</div>
-          <button className="unbutton">Dismiss</button>
+        <div className="toast" style={{ opacity: this.props.opacity }}>
+          <div className="toast-content">{this.names[this.props.index].label}</div>
+          {this.names[this.props.index].actions.map(function (action, index) {
+            return <button className="unbutton" onClick={(event) => _.props.onClick(action)}>{action}</button>;
+          })}
         </div>
-      </div>
+      </div >
     );
   }
 }
 
 class Chat extends React.Component {
   render() {
+    var _ = this;
     return (
       <div className="scroller posts">
         {this.props.messages.map(message => {
-          if (message.name === "Homer") {
             return (
               <article className="card post">
                 <div className="post-content">
-                  <img className="post-avatar" alt="" width="40" height="40" src={homer} />
-                  <div className="post-text-content">
-                    <div className="post-title">
-                      <h1 className="post-heading">{message.name}</h1>
-                      <time className="post-time" datetime={message.time}>{message.timeDifference}</time>
-                    </div>
-                    <p>{message.text}</p>
-                  </div>
-                </div>
-              </article>
-            )
-          } else {
-            return (
-              <article className="card post">
-                <div className="post-content">
-                  <img className="post-avatar" alt="" width="40" height="40" src={lisa} />
+                  <img className="post-avatar" alt="" width="40" height="40" src={_.props.images[message.name]} />
                   <div className="post-text-content">
                     <div className="post-title">
                       <h1 className="post-heading">{message.name}</h1>
@@ -62,7 +47,7 @@ class Chat extends React.Component {
               </article>
             )
           }
-        })}
+        )}
       </div>
     );
   }
@@ -90,13 +75,21 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      username: '',
+      index: 0,
+      opacity: 0,
       message: '',
-      messages: []
+      messages: [],
+      images: []
     };
+    
+    this.state.images['Homer'] = require('./homer-1x.png');
+    this.state.images['Lisa'] = require('./lisa-1x.png');
+
+    this.serviceWorkers = [];
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleToast = this.handleToast.bind(this);
 
     this.socket = io();
 
@@ -117,11 +110,17 @@ class App extends React.Component {
 
     this.socket.on('connect', () => {
       console.log('connect');
+      this.setState({ index: 0 });
+      this.setState({ opacity: 0 });
     });
 
     this.socket.on('disconnect', (reason) => {
       console.log(reason);
+      this.setState({ index: 0 });
+      this.setState({ opacity: 1 });
     });
+
+    this.updateServiceWorker();
   }
 
   handleChange(event) {
@@ -133,6 +132,60 @@ class App extends React.Component {
     event.preventDefault();
   }
 
+  handleToast(action) {
+    if (action === 'refresh' && this.serviceWorkers.length > 0) {
+      console.log(this.serviceWorkers.length);
+      var worker = this.serviceWorkers.pop();
+      worker.postMessage({ action: 'skipWaiting' });
+    }
+    this.setState({ opacity: 0 });
+  }
+
+  updateServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
+    const _toast = this;
+
+    navigator.serviceWorker.register('/service-worker.js').then(function (reg) {
+      if (!navigator.serviceWorker.controller) {
+        return;
+      }
+
+      setTimeout(() => {
+        if (reg.waiting) {
+          _toast.updateReady(reg.waiting);
+          return;
+        }
+
+        if (reg.installing) {
+          _toast.trackInstalling(reg.installing);
+          return;
+        }
+
+        reg.addEventListener('updatefound', function () {
+          _toast.trackInstalling(reg.installing);
+        });
+      }, 3000); // 3 second delay needed
+    });
+  }
+
+  trackInstalling(worker) {
+    const _toast = this;
+    console.log('trackInstalling');
+    worker.addEventListener('statechange', function () {
+      if (worker.state === 'installed') {
+        _toast.updateReady(worker);
+      }
+    });
+  }
+
+  updateReady(worker) {
+    this.setState({ index: 1 });
+    this.setState({ opacity: 1 });
+    this.serviceWorkers.push(worker);
+  }
+
   render() {
     return ([
       <header className="toolbar">
@@ -140,8 +193,15 @@ class App extends React.Component {
       </header>,
       <main className="main">
         <div className="posts-alert"></div>
-        <Chat messages={this.state.messages} />
-        <Toast />
+        <Chat
+          images={this.state.images}
+          messages={this.state.messages}
+        />
+        <Toast
+          index={this.state.index}
+          opacity={this.state.opacity}
+          onClick={(action) => this.handleToast(action)}
+        />
       </main>,
       <footer className="footer">
         <Key
