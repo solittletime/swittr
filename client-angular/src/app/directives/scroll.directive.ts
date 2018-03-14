@@ -22,7 +22,7 @@ export class ScrollDirective implements OnInit {
   @Input() appScroll;
 
   ngOnInit() {
-    this.renderer.setElementStyle(this.el.nativeElement, 'background', 'pink');
+    // this.renderer.setElementStyle(this.el.nativeElement, 'background', 'pink');
   }
 
   public getElement() {

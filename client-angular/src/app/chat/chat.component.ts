@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IOService } from '../service/io.service';
 import timeDifference from '../util/time.util';
-import { ScrollDirective } from '../scroll.directive';
+import { ScrollDirective } from '../directives/scroll.directive';
 
 @Component({
   selector: 'app-chat',

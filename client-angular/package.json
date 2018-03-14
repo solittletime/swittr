@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && cp sw.js dist",
-    "prod": "ng build --prod && cp sw.js dist",
+    "build": "rm -rf dist && ng build && cp sw.js dist",
+    "prod": "rm -rf dist && ng build --prod && cp sw.js dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

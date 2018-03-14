@@ -9,7 +9,7 @@ import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
 import { KeyComponent } from './key/key.component';
 import { ToastComponent } from './toast/toast.component';
-import { ScrollDirective } from './scroll.directive';
+import { ScrollDirective } from './directives/scroll.directive';
 
 @NgModule({
   declarations: [
