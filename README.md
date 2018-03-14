@@ -1,6 +1,6 @@
 # Swittr
 
-Demo app using Node.js, Express.js, Socket.io, RxJS plus Angular with a service worker.
+Angular and React versions of the Wittr app using Node.js, Express.js, Socket.io with a service worker.
 
 ### Build
 
@@ -11,13 +11,19 @@ Dependencies:
 Then clone the project and:
 
 ```
-cd swittr/client
+cd swittr/server
 npm install
 npm run build
 ```
 
 ```
-cd swittr/server
+cd swittr/client-angular
+npm install
+npm run build
+```
+
+```
+cd swittr/client-react
 npm install
 npm run build
 ```
@@ -27,11 +33,13 @@ npm run build
 ```
 cd swittr/server
 npm start
+npm run react
 ```
 
 ### Using the app
 
-(http://localhost:4300)
+(http://localhost:4300) Angular client
+(http://localhost:4500) React client
 
 ### Further reading
 
@@ -39,3 +47,5 @@ npm start
 * [Socket Programming in AngularJS 2 - Building a simple chat application with Socket.io and RxJS](http://www.discoversdk.com/blog/socket-programming-in-angularjs-2-building-a-simple-chat-application-with-socket.io-and-rxjs)
 * [Wittr - Silly demo app for an online course](https://github.com/jakearchibald/wittr)
 * [RxJS - The ReactiveX library for JavaScript](http://reactivex.io/rxjs/manual/overview.html)
+* [Creating a chat web app using Express.js, React.js & Socket.io](https://blog.cloudboost.io/creating-a-chat-web-app-using-express-js-react-js-socket-io-1b01100a8ea5)
+* [React forms](https://reactjs.org/docs/forms.html)
