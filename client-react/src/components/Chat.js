@@ -4,7 +4,7 @@ class Chat extends React.Component {
   render() {
     var _ = this;
     return (
-      <div className="scroller posts" id="scrollx">
+      <div className="scroller posts" id="scroll-id">
         {this.props.messages.map(message => {
           return (
             <article className="card post">

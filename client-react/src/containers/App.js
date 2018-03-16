@@ -21,7 +21,7 @@ class App extends React.Component {
     this.state.images['Homer'] = require('../images/homer-1x.png');
     this.state.images['Lisa'] = require('../images/lisa-1x.png');
 
-    this.serviceWorkers = [];
+    this.currentServiceWorker = null;
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -30,14 +30,19 @@ class App extends React.Component {
     this.socket = io();
 
     this.socket.on('message', (data) => {
-      this.state.messages.push(data);
+      var messages = JSON.parse(data);
+      var _ = this;
+      messages.forEach(function(message) {
+        _.state.messages.push(message);
+      });
+
       var index, len;
       for (index = 0, len = this.state.messages.length; index < len; ++index) {
         this.state.messages[index].timeDifference = timeDifference(this.state.messages[index].time);
       }
 
       setTimeout(() => {
-        const el = document.getElementById('scrollx');
+        const el = document.getElementById('scroll-id');
         el.scrollTop = el.scrollHeight - el.clientHeight;
       }, 100);
 
@@ -74,9 +79,9 @@ class App extends React.Component {
   }
 
   handleToast(action) {
-    if (action === 'refresh' && this.serviceWorkers.length > 0) {
-      var worker = this.serviceWorkers.pop();
-      worker.postMessage({ action: 'skipWaiting' });
+    if (action === 'refresh' && this.currentServiceWorker) {
+      this.currentServiceWorker.postMessage({ action: 'skipWaiting' });
+      this.currentServiceWorker = null;
     }
     this.setState({ opacity: 0 });
   }
@@ -85,7 +90,7 @@ class App extends React.Component {
     if (!('serviceWorker' in navigator)) {
       return;
     }
-    const _toast = this;
+    const _ = this;
 
     navigator.serviceWorker.register('/service-worker.js').then(function (reg) {
       if (!navigator.serviceWorker.controller) {
@@ -94,28 +99,38 @@ class App extends React.Component {
 
       setTimeout(() => {
         if (reg.waiting) {
-          _toast.updateReady(reg.waiting);
+          _.updateReady(reg.waiting);
           return;
         }
 
         if (reg.installing) {
-          _toast.trackInstalling(reg.installing);
+          _.trackInstalling(reg.installing);
           return;
         }
 
         reg.addEventListener('updatefound', function () {
-          _toast.trackInstalling(reg.installing);
+          _.trackInstalling(reg.installing);
         });
       }, 3000); // 3 second delay needed
+    });
+
+    // Ensure refresh is only called once.
+    // This works around a bug in "force update on reload".
+    var refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      console.log('controllerchange');
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
     });
   }
 
   trackInstalling(worker) {
-    const _toast = this;
+    const _ = this;
     console.log('trackInstalling');
     worker.addEventListener('statechange', function () {
       if (worker.state === 'installed') {
-        _toast.updateReady(worker);
+        _.updateReady(worker);
       }
     });
   }
@@ -123,7 +138,7 @@ class App extends React.Component {
   updateReady(worker) {
     this.setState({ index: 1 });
     this.setState({ opacity: 1 });
-    this.serviceWorkers.push(worker);
+    this.currentServiceWorker = worker;
   }
 
   render() {
