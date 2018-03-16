@@ -1,6 +1,9 @@
 var fs = require('fs');
 
-var files = ['/index.html'];
+var files = [];
+files.push('/');
+files.push('https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff');
+files.push('https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff');
 
 fs.readFile('sw.js', 'utf-8', function (err, bufsw) {
   if (err) console.log(err);

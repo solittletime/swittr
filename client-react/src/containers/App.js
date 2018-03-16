@@ -1,5 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
+import idb from 'idb';
 import Chat from '../components/Chat';
 import Key from '../components/Key';
 import Toast from '../components/Toast';
@@ -9,6 +10,9 @@ import './App.css';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    var _ = this;
+
+    this.dbPromise = this.openDatabase();
 
     this.state = {
       index: 0,
@@ -31,8 +35,27 @@ class App extends React.Component {
 
     this.socket.on('message', (data) => {
       var messages = JSON.parse(data);
-      var _ = this;
-      messages.forEach(function(message) {
+
+      this.dbPromise.then(function (db) {
+        if (!db) return;
+
+        var tx = db.transaction('swittrs', 'readwrite');
+        var store = tx.objectStore('swittrs');
+        messages.forEach(function (message) {
+          store.put(message);
+        });
+
+        // limit store to 10 items
+        store.index('by-date').openCursor(null, "prev").then(function (cursor) {
+          return cursor.advance(10);
+        }).then(function deleteRest(cursor) {
+          if (!cursor) return;
+          cursor.delete();
+          return cursor.continue().then(deleteRest);
+        });
+      });
+
+      messages.forEach(function (message) {
         _.state.messages.push(message);
       });
 
@@ -60,6 +83,10 @@ class App extends React.Component {
       this.setState({ opacity: 0 });
     });
 
+    this.showCachedMessages().then(function() {
+      // indexController._openSocket();
+    });
+  
     this.socket.on('disconnect', (reason) => {
       console.log(reason);
       this.setState({ index: 0 });
@@ -67,6 +94,11 @@ class App extends React.Component {
     });
 
     this.updateServiceWorker();
+    // this.cleanImageCache();
+
+    setInterval(function () {
+      _.cleanImageCache();
+    }, 1000 * 60 * 5);
   }
 
   handleChange(event) {
@@ -141,6 +173,21 @@ class App extends React.Component {
     this.currentServiceWorker = worker;
   }
 
+  openDatabase() {
+    // If the browser doesn't support service worker,
+    // we don't care about having a database
+    if (!navigator.serviceWorker) {
+      return Promise.resolve();
+    }
+
+    return idb.open('swittr', 1, function (upgradeDb) {
+      var store = upgradeDb.createObjectStore('swittrs', {
+        keyPath: 'id'
+      });
+      store.createIndex('by-date', 'time');
+    });
+  }
+
   render() {
     return ([
       <header className="toolbar">
@@ -168,5 +215,53 @@ class App extends React.Component {
     ]);
   }
 }
+
+App.prototype.showCachedMessages = function () {
+  var _ = this;
+
+  return this.dbPromise.then(function (db) {
+    // if we're already showing posts, eg shift-refresh
+    // or the very first load, there's no point fetching
+    // posts from IDB
+    if (!db || _.state.messages.length > 0) return;
+
+    var index = db.transaction('swittrs')
+      .objectStore('swittrs').index('by-date');
+
+      return index.getAll().then(function (messages) {
+      messages.forEach(function (message) {
+        _.state.messages.push(message);
+      });
+      _.setState({ messages: _.state.messages });
+    });
+  });
+};
+
+App.prototype.cleanImageCache = function () {
+  return this.dbPromise.then(function (db) {
+    if (!db) return;
+
+    var imagesNeeded = [];
+
+    var tx = db.transaction('swittrs');
+    return tx.objectStore('swittrs').getAll().then(function (messages) {
+      messages.forEach(function (message) {
+        if (message.photo) {
+          imagesNeeded.push(message.photo);
+        }
+        imagesNeeded.push(message.avatar);
+      });
+
+      return caches.open('swittr-content-imgs');
+    }).then(function (cache) {
+      return cache.keys().then(function (requests) {
+        requests.forEach(function (request) {
+          var url = new URL(request.url);
+          if (!imagesNeeded.includes(url.pathname)) cache.delete(request);
+        });
+      });
+    });
+  });
+};
 
 export default App;
